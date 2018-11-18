@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Lista de ficheros</title>
+
+    <!-- Bootstrap y Dropzone de CDN.-->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
+    <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
+
+    <!-- Configuración del plugin. TODO: File from CDN -->
+    <script>
+        Dropzone.options.myAwesomeDropzone = { // The camelized version of the ID of the form element
+            // The configuration we've talked about above
+            autoProcessQueue: false,
+            uploadMultiple: true,
+            parallelUploads: 100,
+            maxFiles: 100,
+            paramName: "pendingFiles",
+            dictDefaultMessage: 'Arrastre ficheros aquí para subirlos',
+
+            // The setting up of the dropzone
+            init: function () {
+                var myDropzone = this;
+
+                // First change the button to actually tell Dropzone to process the queue.
+                this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
+                    // Make sure that the form isn't actually being sent.
+                    e.preventDefault();
+                    e.stopPropagation();
+                    myDropzone.processQueue();
+                });
+
+                // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
+                // of the sending event because uploadMultiple is set to true.
+                this.on("sendingmultiple", function () {
+                    // Gets triggered when the form is actually being sent.
+                    // Hide the success button or the complete form.
+                });
+                this.on("successmultiple", function (files, response) {
+                    // Gets triggered when the files have successfully been sent.
+                    // Redirect user or notify of success.
+                });
+                this.on("errormultiple", function (files, response) {
+                    // Gets triggered when there was an error sending the files.
+                    // Maybe show form again, and notify user of error
+                });
+            }
+
+        }
+    </script>
+
+</head>
+
+<body>
+<div class="container">
+    <form action="/recursos/upload"
+          th:object="${DTO}"
+          id="my-awesome-dropzone"
+          class="dropzone"
+          enctype="multipart/form-data"
+          method="POST">
+
+        <input type="hidden" th:field="*{uuidCarpeta}" id="idcarpeta">
+
+
+        <h1>Lista de ficheros</h1>
+        <p class="lead">Ficheros alojados en <span th:text="*{readingPath}"></span>. Código <code
+                th:text="*{uuidCarpeta}"></code></p>
+
+        <h3>Subir ficheros</h3>
+        <p>Arrastre y suelte ficheros a esta ventana para subir ficheros al path.</p>
+
+
+        <h3>Listado actual de ficheros</h3>
+        <p>Estos son los ficheros que se encuentran actualmente alojados.</p>
+        <div class="row">
+            <div class="col-md-3">Nombre fichero</div>
+            <div class="col-md-3">Size</div>
+            <div class="col-md-3">Modified</div>
+            <div class="col-md-3">UUID</div>
+        </div>
+        <div class="row" th:each="recurso: *{recursos}">
+            <div class="col-md-3" th:text="${recurso.nombreFichero}"></div>
+            <div class="col-md-3" th:text="${recurso.sizeInBytes}"></div>
+            <div class="col-md-3" th:text="${recurso.fechaCreacion}"></div>
+            <div class="col-md-3" th:text="${recurso.uuidFichero}"></div>
+        </div>
+
+        <h3>Añadir ficheros</h3>
+        <p>Puede añadir ficheros desde aquí.</p>
+        <div class="dropzone-previews"></div>
+        <div class="row">
+            <div class="col-6 mx-auto">
+                <button type="submit" class="btn btn-outline-dark">Enviar datos a <code
+                        th:text="*{uuidCarpeta}"></code></button>
+            </div>
+        </div>
+    </form>
+</div> <!-- /container -->
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
+<script
+        src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
+        crossorigin="anonymous"></script>
+</body>
+</html>

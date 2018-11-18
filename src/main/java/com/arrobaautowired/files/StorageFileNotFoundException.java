@@ -1,4 +1,4 @@
-package hello.storage;
+package com.arrobaautowired.files;
 
 public class StorageFileNotFoundException extends StorageException {
 

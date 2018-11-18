@@ -23,8 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import hello.storage.StorageFileNotFoundException;
-import hello.storage.StorageService;
+import com.arrobaautowired.files.StorageFileNotFoundException;
+import com.arrobaautowired.files.StorageService;
 
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc

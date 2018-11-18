@@ -1,4 +1,4 @@
-package hello.storage;
+package com.arrobaautowired.files;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,14 +18,19 @@ import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
+
 @Service
 public class FileSystemStorageService implements StorageService {
 
-    private final Path rootLocation;
+    private Path rootLocation;
 
-    @Autowired
-    public FileSystemStorageService(@Value("${root-location}")String rootLocation) {
-        this.rootLocation = Paths.get(rootLocation);
+    @Value("${root.location}")
+    private String locationPath;
+
+    @PostConstruct
+    public void setUpService(){
+        this.rootLocation = Paths.get(locationPath);
     }
 
     @Override
@@ -61,7 +66,6 @@ public class FileSystemStorageService implements StorageService {
         catch (IOException e) {
             throw new StorageException("Failed to read stored files", e);
         }
-
     }
 
     @Override
